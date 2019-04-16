@@ -1,3 +1,6 @@
 .idea
 config/secure.py
 tool
+**/__pycache__
+Pipfile
+Pipfile.lock
