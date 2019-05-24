@@ -5,6 +5,8 @@ import json
 
 from flask import Response
 
+from tool.lib.function import debug
+
 
 class Reply(object):
     def __init__(self, **kwargs):
@@ -37,9 +39,35 @@ class Reply(object):
         self._msg = value
 
     def json(self):
+        """
+        :return:
+        """
         data = {
             "result": self._result,
-            "status": self.status,
-            "msg": self.msg
+            "status": self._status,
+            "msg": self._msg
         }
-        return Response(json.dumps(data), mimetype="application/json;charset=utf-8")
+        debug(data)
+        data = json.dumps(data)
+        debug(data)
+        return Response(data, mimetype="application/json;charset=utf-8")
+
+    def success(self, result=""):
+        """
+        :param result:
+        :return:
+        """
+        if result == "":
+            result = self._result
+        self._status = 0
+        self._result = result
+        return self.json()
+
+    def error(self, msg=""):
+        """
+        :param msg:
+        :return:
+        """
+        self._status = 1
+        self._msg = msg
+        return self.json()
