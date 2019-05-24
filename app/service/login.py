@@ -3,9 +3,8 @@ author songjie
 """
 from flask import request
 
-from app.libs.conversion import Conversion
+from app.libs.conversion_data_type import ConversionDataType
 from app.libs.reply import Reply
-from tool.lib.function import debug
 
 
 def handle_login():
@@ -30,7 +29,7 @@ def handle_register():
     :return:
     """
     form = request.values
-    form = Conversion().combined_multi_dict_to_dict(form)
+    form = ConversionDataType().combined_multi_dict_to_dict(form)
     del form['rePassword']
     reply = Reply(result=form)
     return reply.success()

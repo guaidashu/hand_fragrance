@@ -3,7 +3,7 @@ author songjie
 """
 
 
-class Conversion(object):
+class ConversionDataType(object):
     def __init__(self):
         pass
 
