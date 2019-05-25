@@ -16,8 +16,8 @@ def handle_login():
     password = request.values.get("password")
     if str(user_name) == '13739497421':
         if password == 'wyysdsa!':
-            Reply.success("ok")
-    Reply.error("用户名或密码错误")
+            return Reply.success("ok")
+    return Reply.error("用户名或密码错误")
 
 
 def handle_register():
