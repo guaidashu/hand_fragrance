@@ -12,9 +12,7 @@ class Reply(object):
     _msg = None
 
     def __init__(self, **kwargs):
-        Reply._result = kwargs.setdefault("result", "")
-        Reply._code = kwargs.setdefault("code", 0)
-        Reply._msg = kwargs.setdefault("msg", "")
+        pass
 
     @property
     def result(self):
@@ -54,23 +52,27 @@ class Reply(object):
         return Response(data, mimetype="application/json;charset=utf-8")
 
     @classmethod
-    def success(cls, result=""):
+    def success(cls, result="", code=0):
         """
+        :param code:
         :param result:
         :return:
         """
         if result == "":
             result = cls._result
-        cls._code = 0
+        cls._code = code
         cls._result = result
+        cls.msg = ""
         return cls.json()
 
     @classmethod
-    def error(cls, msg=""):
+    def error(cls, msg="", code=1):
         """
+        :param code:
         :param msg:
         :return:
         """
-        cls._code = 1
+        cls._code = code
         cls._msg = msg
+        cls._result = ""
         return cls.json()

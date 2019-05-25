@@ -2,7 +2,6 @@
 author songjie
 """
 from app.libs.helper import Helper
-from tool.lib.function import curl_data
 
 
 class GetBookData:
