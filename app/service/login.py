@@ -9,27 +9,23 @@ from app.libs.reply import Reply
 
 def handle_login():
     """
+    handle login event
     :return:
     """
     user_name = request.values.get("userName")
     password = request.values.get("password")
-    reply = Reply()
     if str(user_name) == '13739497421':
         if password == 'wyysdsa!':
-            reply.result = "ok"
-        else:
-            reply.status = 1
-    else:
-        reply.status = 1
-    return reply.json()
+            Reply.success("ok")
+    Reply.error("用户名或密码错误")
 
 
 def handle_register():
     """
+    handle register event
     :return:
     """
     form = request.values
-    form = ConversionDataType().combined_multi_dict_to_dict(form)
+    form = ConversionDataType.combined_multi_dict_to_dict(form)
     del form['rePassword']
-    reply = Reply(result=form)
-    return reply.success()
+    return Reply.success(form)

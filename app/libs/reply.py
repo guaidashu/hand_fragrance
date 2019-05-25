@@ -5,69 +5,72 @@ import json
 
 from flask import Response
 
-from tool.lib.function import debug
-
 
 class Reply(object):
+    _result = None
+    _code = None
+    _msg = None
+
     def __init__(self, **kwargs):
-        self._result = kwargs.setdefault("result", "")
-        self._status = kwargs.setdefault("status", 0)
-        self._msg = kwargs.setdefault("msg", "")
+        Reply._result = kwargs.setdefault("result", "")
+        Reply._code = kwargs.setdefault("code", 0)
+        Reply._msg = kwargs.setdefault("msg", "")
 
     @property
     def result(self):
-        return self._result
+        return Reply._result
 
     @result.setter
     def result(self, value):
-        self._result = value
+        Reply._result = value
 
     @property
-    def status(self):
-        return self._status
+    def code(self):
+        return Reply._code
 
-    @status.setter
-    def status(self, value):
-        self._status = value
+    @code.setter
+    def code(self, value):
+        Reply._code = value
 
     @property
     def msg(self):
-        return self._msg
+        return Reply._msg
 
     @msg.setter
     def msg(self, value):
-        self._msg = value
+        Reply._msg = value
 
-    def json(self):
+    @classmethod
+    def json(cls):
         """
         :return:
         """
         data = {
-            "result": self._result,
-            "status": self._status,
-            "msg": self._msg
+            "result": cls._result,
+            "code": cls._code,
+            "msg": cls._msg
         }
-        debug(data)
         data = json.dumps(data)
-        debug(data)
         return Response(data, mimetype="application/json;charset=utf-8")
 
-    def success(self, result=""):
+    @classmethod
+    def success(cls, result=""):
         """
         :param result:
         :return:
         """
         if result == "":
-            result = self._result
-        self._status = 0
-        self._result = result
-        return self.json()
+            result = cls._result
+        cls._code = 0
+        cls._result = result
+        return cls.json()
 
-    def error(self, msg=""):
+    @classmethod
+    def error(cls, msg=""):
         """
         :param msg:
         :return:
         """
-        self._status = 1
-        self._msg = msg
-        return self.json()
+        cls._code = 1
+        cls._msg = msg
+        return cls.json()
