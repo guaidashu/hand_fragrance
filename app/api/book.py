@@ -26,5 +26,5 @@ def search():
     if isbn_or_key == 'isbn':
         result = GetBookData.search_by_isbn(q)
     else:
-        result = GetBookData.search_by_keyword(q)
+        result = GetBookData.search_by_keyword(q, page)
     return Reply.success(result)

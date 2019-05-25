@@ -1,6 +1,8 @@
 """
 author songjie
 """
+from flask import current_app
+
 from app.libs.helper import Helper
 
 
@@ -20,14 +22,17 @@ class GetBookData:
         return result
 
     @classmethod
-    def search_by_keyword(cls, keyword, count=15, start=0):
+    def search_by_keyword(cls, keyword, page=1):
         """
         search book according to keyword
-        :param start:
-        :param count:
+        :param page:
         :param keyword:
         :return:
         """
-        url = cls.keyword_url.format(keyword, count, start)
+        url = cls.keyword_url.format(keyword, current_app.config['RECENT_BOOK_PER_PAGE'], cls.calculate_start(page))
         result = Helper.get_book_api_data(url)
         return result
+
+    @staticmethod
+    def calculate_start(page):
+        return current_app.config['RECENT_BOOK_PER_PAGE'] * page
