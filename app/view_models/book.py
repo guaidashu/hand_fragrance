@@ -21,6 +21,12 @@ class BookCollection(object):
         self.keyword = ''
 
     def fill(self, books, keyword):
+        """
+        构造最终数据
+        :param books:
+        :param keyword:
+        :return:
+        """
         self.total = books.total
         self.keyword = keyword
         self.books = [BookViewModel(book) for book in books.books]
