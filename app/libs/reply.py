@@ -48,7 +48,7 @@ class Reply(object):
             "code": cls._code,
             "msg": cls._msg
         }
-        data = json.dumps(data)
+        data = json.dumps(data, default=lambda o: o.__dict__)
         return Response(data, mimetype="application/json;charset=utf-8")
 
     @classmethod
@@ -58,11 +58,11 @@ class Reply(object):
         :param result:
         :return:
         """
-        if result == "":
+        if not result:
             result = cls._result
         cls._code = code
         cls._result = result
-        cls.msg = ""
+        cls._msg = ""
         return cls.json()
 
     @classmethod

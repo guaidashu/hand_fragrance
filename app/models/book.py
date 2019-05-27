@@ -4,12 +4,24 @@ author songjie
 import json
 from sqlalchemy import Column, String
 from sqlalchemy import Integer
+
 from app.models.base import Base
 
 
 class Book(Base):
     """
-        一些属性定义重复性比较大，元类可以解决这个问题
+    一些属性定义重复性比较大，元类可以解决这个问题
+    id: 唯一主键id
+    title: 书籍标题(名称)
+    _author: 作者
+    binding: 书籍的装帧(平装或者精装)
+    publisher: 出版社
+    price: 价格
+    pages: 总页数
+    pubdate: 出版日期
+    isbn: 国际书籍标号
+    summary: 简介
+    image: 图片路径
     """
     __tablename__ = 'book'
 
