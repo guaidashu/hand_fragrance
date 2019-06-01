@@ -52,5 +52,10 @@ class GetBookData(object):
         self.total = data['total']
         self.books = data['books']
 
-    def calculate_start(self, page):
+    @staticmethod
+    def calculate_start(page):
         return current_app.config['RECENT_BOOK_PER_PAGE'] * page
+
+    @property
+    def first(self):
+        return self.books[0] if self.total > 0 else None

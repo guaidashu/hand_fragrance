@@ -8,10 +8,13 @@ class BookViewModel(object):
         self.title = book['title']
         self.publisher = book['publisher']
         self.pages = book['pages'] or ''
+        self.pubdate = book['pubdate']
         self.author = book['author']
         self.price = book['price']
+        self.binding = book['binding']
         self.summary = book['summary'] or ''
         self.image = book['image']
+        self.isbn = book['isbn']
 
 
 class BookCollection(object):
