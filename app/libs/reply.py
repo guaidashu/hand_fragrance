@@ -48,8 +48,15 @@ class Reply(object):
             "code": cls._code,
             "msg": cls._msg
         }
-        data = json.dumps(data, default=lambda o: o.__dict__)
+        data = json.dumps(data, default=cls.object_to_dict)
         return Response(data, mimetype="application/json;charset=utf-8")
+
+    @staticmethod
+    def object_to_dict(value):
+        data = {}
+        for column in value.__table__.columns:
+            data[column.name] = getattr(value, column.name)
+        return data
 
     @classmethod
     def success(cls, result="", code=0):

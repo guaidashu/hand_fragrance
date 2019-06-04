@@ -20,6 +20,7 @@ class User(Base):
     receive_counter
     gifts
     """
+    # __tablename__ 用以指定表名
     __tablename__ = 'user'
     # __bind_key__ = 'fisher'
 
@@ -31,9 +32,9 @@ class User(Base):
     beans = Column(Float, default=0)
     send_counter = Column(Integer, default=0)
     receive_counter = Column(Integer, default=0)
-    gifts = relationship('Gift')
+    # gifts = relationship('Gift')
 
-    _password = Column('password', String(100))
+    _password = Column('password', String(255))
 
     @property
     def password(self):

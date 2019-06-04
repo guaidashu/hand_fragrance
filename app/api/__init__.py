@@ -7,3 +7,4 @@ api = Blueprint('api', __name__, url_prefix='/api', static_folder="../../static"
 from app.api import test
 from app.api import user
 from app.api import book
+from app.api import gift

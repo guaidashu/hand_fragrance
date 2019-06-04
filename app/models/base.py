@@ -39,8 +39,10 @@ db = SQLAlchemy(query_class=Query)
 
 
 class Base(db.Model):
+    # 加上 __abstract__ 为True之后， sqlalchemy将不会创建base表， 否则会认为我们想要创建一个交base的表
     __abstract__ = True
     create_time = Column('create_time', Integer)
+    # status 属性代表是否被删除， (软删除规律)默认为1，表示没有被删除
     status = Column(SmallInteger, default=1)
 
     def __init__(self):
