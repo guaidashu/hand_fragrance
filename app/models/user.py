@@ -1,6 +1,8 @@
 """
 author songjie
 """
+from flask_login import UserMixin
+from app import login_manager
 from sqlalchemy import Column, Integer, String, Boolean, Float
 from sqlalchemy.orm import relationship
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -8,7 +10,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from app.models import Base
 
 
-class User(Base):
+class User(UserMixin, Base):
     """
     id:
     nickname: 昵称、用户名
@@ -41,10 +43,15 @@ class User(Base):
         return self._password
 
     @password.setter
-    def password(self, raw):
-        self._password = generate_password_hash(raw)
+    def password(self, value):
+        self._password = generate_password_hash(value)
 
     def check_password(self, raw):
         if not self._password:
             return False
         return check_password_hash(self._password, raw)
+
+
+@login_manager.user_loader
+def get_user(uid):
+    return User.query.get(int(uid))

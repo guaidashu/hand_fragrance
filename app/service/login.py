@@ -2,10 +2,10 @@
 author songjie
 """
 from flask import request
+from flask_login import login_user
 
 from app.forms.user import RegisterForm, LoginForm
 from app.models.base import db
-from app.libs.conversion_data_type import ConversionDataType
 from app.libs.reply import Reply
 from app.models.user import User
 
@@ -26,7 +26,9 @@ def handle_login():
             return Reply.error("用户名或密码错误")
     else:
         return Reply.error("用户名或密码错误")
-    return Reply.success()
+    # 保存用户信息(票据)
+    login_user(user, remember=True)
+    return Reply.success(user, data_type=2)
 
 
 def handle_register():
@@ -44,4 +46,4 @@ def handle_register():
     user.set_attrs(form)
     db.session.add(user)
     db.session.commit()
-    return Reply.success(user)
+    return Reply.success()

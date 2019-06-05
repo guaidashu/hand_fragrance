@@ -2,10 +2,13 @@
 author songjie
 """
 from flask import Flask
+from flask_login import LoginManager
 
 from app.errors import register_error
 
 from app.models.base import db
+
+login_manager = LoginManager()
 
 
 def create_app():
@@ -15,6 +18,7 @@ def create_app():
     register_blueprint(app)
     register_error(app)
     db.init_app(app)
+    login_manager.init_app(app)
     # db.create_all(app=app)
     return app
 

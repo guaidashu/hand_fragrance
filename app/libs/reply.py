@@ -10,6 +10,7 @@ class Reply(object):
     _result = None
     _code = None
     _msg = None
+    _data_type = 1
 
     def __init__(self, **kwargs):
         pass
@@ -38,8 +39,16 @@ class Reply(object):
     def msg(self, value):
         Reply._msg = value
 
+    @property
+    def data_type(self):
+        return Reply._data_type
+
+    @data_type.setter
+    def data_type(self, value):
+        Reply._data_type = value
+
     @classmethod
-    def json(cls):
+    def json(cls, data_type=None):
         """
         :return:
         """
@@ -48,23 +57,30 @@ class Reply(object):
             "code": cls._code,
             "msg": cls._msg
         }
+        if data_type:
+            cls._data_type = data_type
         data = json.dumps(data, default=cls.object_to_dict)
         return Response(data, mimetype="application/json;charset=utf-8")
 
     @staticmethod
     def object_to_dict(value):
         data = {}
+        if Reply._data_type == 1:
+            return value.__dict__
         for column in value.__table__.columns:
             data[column.name] = getattr(value, column.name)
         return data
 
     @classmethod
-    def success(cls, result="", code=0):
+    def success(cls, result="", code=0, data_type=None):
         """
+        :param data_type:
         :param code:
         :param result:
         :return:
         """
+        if data_type:
+            cls._data_type = data_type
         if not result:
             result = cls._result
         cls._code = code
@@ -73,12 +89,15 @@ class Reply(object):
         return cls.json()
 
     @classmethod
-    def error(cls, msg="", code=1):
+    def error(cls, msg="", code=1, data_type=None):
         """
+        :param data_type:
         :param code:
         :param msg:
         :return:
         """
+        if data_type:
+            cls._data_type = data_type
         cls._code = code
         cls._msg = msg
         cls._result = ""
