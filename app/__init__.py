@@ -19,7 +19,7 @@ def create_app():
     register_error(app)
     db.init_app(app)
     login_manager.init_app(app)
-    # db.create_all(app=app)
+    db.create_all(app=app)
     return app
 
 

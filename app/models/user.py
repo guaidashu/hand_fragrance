@@ -5,9 +5,13 @@ from flask_login import UserMixin
 from app import login_manager
 from sqlalchemy import Column, Integer, String, Boolean, Float
 from sqlalchemy.orm import relationship
+from app.libs.helper import Helper
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from app.models import Base
+from app.models.gift import Gift
+from app.models.wish import Wish
+from app.spider.get_book_data import GetBookData
 
 
 class User(UserMixin, Base):
@@ -50,6 +54,22 @@ class User(UserMixin, Base):
         if not self._password:
             return False
         return check_password_hash(self._password, raw)
+
+    def can_save_to_list(self, isbn):
+        if Helper.is_isbn_or_key(isbn) != 'isbn':
+            return False
+        get_book_data = GetBookData()
+        get_book_data.search_by_isbn(isbn)
+        if not get_book_data.first:
+            return False
+        gifting = Gift.query.filter_by(uid=self.id, isbn=isbn,
+                                       launched=False).first()
+        wishing = Wish.query.filter_by(uid=self.id, isbn=isbn,
+                                       launched=False).first()
+        if not gifting and not wishing:
+            return True
+        else:
+            return False
 
 
 @login_manager.user_loader

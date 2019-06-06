@@ -13,6 +13,12 @@ __all__ = ['db', 'Base']
 class SQLAlchemy(_SQLAlchemy):
     @contextmanager
     def auto_commit(self, throw=True):
+        """
+        根据 上下文管理器 contextmanager 装饰器定义一个上下文自动提交方法，
+        节省掉 try except操作和commit操作
+        :param throw:
+        :return:
+        """
         try:
             yield
             self.session.commit()

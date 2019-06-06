@@ -8,3 +8,4 @@ from app.api import test
 from app.api import user
 from app.api import book
 from app.api import gift
+from app.api import wish

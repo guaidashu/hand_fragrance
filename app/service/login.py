@@ -16,8 +16,6 @@ def handle_login():
     :return:
     """
     form = LoginForm(request.values)
-    # user_name = request.values.get("userName")
-    # password = request.values.get("password")
     if not form.validate():
         return Reply.error(form.errors)
     user = User.query.filter_by(email=form.email.data).first()
@@ -42,8 +40,8 @@ def handle_register():
     form = RegisterForm(request.values)
     if not form.validate():
         return Reply.error(form.errors)
-    user = User()
-    user.set_attrs(form)
-    db.session.add(user)
-    db.session.commit()
+    with db.auto_commit():
+        user = User()
+        user.set_attrs(form)
+        db.session.add(user)
     return Reply.success()
