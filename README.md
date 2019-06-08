@@ -4,7 +4,7 @@ So, Please not using it to as your graduation design and conflict with me in 201
 Notes: 
 
 If you want to use this system, you should change some code in flask_login/utils.py.
- There is a function called by login_required, we should rewrite it.
+ There is a function called by login_required(in line 222), we should rewrite it.
  
  Add a function :
  

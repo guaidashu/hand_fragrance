@@ -10,7 +10,10 @@ from app.service.login import handle_login, handle_register
 
 @api.route('/user/getUserInfo', methods=['POST'])
 def get_user_info():
-    return Reply.success(current_user, data_type=2)
+    if current_user.id:
+        return Reply.success(current_user, data_type=2)
+    else:
+        return Reply.success(current_user)
 
 
 @api.route("/user/login", methods=['POST'])

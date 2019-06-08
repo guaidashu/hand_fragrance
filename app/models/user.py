@@ -1,14 +1,19 @@
 """
 author songjie
 """
+from math import floor
+
 from flask_login import UserMixin
 from app import login_manager
 from sqlalchemy import Column, Integer, String, Boolean, Float
 from sqlalchemy.orm import relationship
+
+from app.libs.enums import PendingStatus
 from app.libs.helper import Helper
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from app.models import Base
+from app.models.drift import Drift
 from app.models.gift import Gift
 from app.models.wish import Wish
 from app.spider.get_book_data import GetBookData
@@ -32,7 +37,7 @@ class User(UserMixin, Base):
 
     id = Column(Integer, primary_key=True)
     nickname = Column(String(24), nullable=False)
-    phone_number = Column(String(18), unique=True)
+    phone_number = Column(String(11), unique=True)
     email = Column(String(50), unique=True, nullable=False)
     confirmed = Column(Boolean, default=False)
     beans = Column(Float, default=0)
@@ -70,6 +75,15 @@ class User(UserMixin, Base):
             return True
         else:
             return False
+
+    def can_send_drift(self):
+        if self.beans < 1:
+            return False
+        success_gifts = Drift.query.filter(Drift.pending == PendingStatus.success,
+                                           Drift.gifter_id == self.id).count()
+        success_receive = Drift.query.filter(Drift.pending == PendingStatus.success,
+                                             Drift.requester_id == self.id).count()
+        return True if floor(success_gifts) >= floor(success_receive / 2) else False
 
 
 @login_manager.user_loader

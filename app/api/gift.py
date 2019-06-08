@@ -55,3 +55,18 @@ def get_recent_books():
     """
     books = GiftService.recent()
     return Reply.success(books)
+
+
+@api.route("/gifts/redraw", methods=["POST"])
+@login_required
+def redraw_from_gifts():
+    """
+    从赠送清单移除
+    :return:
+    """
+    gift_id = request.values.get("id")
+    gift = Gift.query.filter_by(id=gift_id, launched=False).first_or_404()
+    with db.auto_commit():
+        current_user.beans -= current_app.config['BEANS_UPLOAD_ONE_BOOK']
+        gift.delete()
+    return Reply.success()

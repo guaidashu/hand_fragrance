@@ -31,7 +31,7 @@ class GetBookData(object):
         :param keyword:
         :return:
         """
-        url = self.keyword_url.format(keyword, current_app.config['RECENT_BOOK_PER_PAGE'], self.calculate_start(page))
+        url = self.keyword_url.format(keyword, current_app.config['SEARCH_BOOK_PER_PAGE'], self.calculate_start(page))
         result = Helper.get_book_api_data(url)
         self.__fill_collection(result)
 

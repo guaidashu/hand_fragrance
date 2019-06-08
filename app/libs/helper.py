@@ -32,7 +32,7 @@ class Helper(object):
         :param return_json:
         :return:
         """
-        data, res = curl_data(url, return_response=True)
+        data, res = curl_data(url, open_virtual_ip=True, return_response=True)
         if res.status_code != 200:
             return {} if return_json else ''
         else:

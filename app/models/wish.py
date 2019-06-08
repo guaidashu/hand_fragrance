@@ -3,7 +3,7 @@ author songjie
 """
 
 from app.spider.get_book_data import GetBookData
-from sqlalchemy import Column, String, Integer, ForeignKey, Boolean
+from sqlalchemy import Column, String, Integer, ForeignKey, Boolean, desc
 from sqlalchemy.orm import relationship
 from app.models.base import Base
 
@@ -22,3 +22,10 @@ class Wish(Base):
         get_book_data = GetBookData()
         get_book_data.search_by_isbn(self.isbn)
         return get_book_data.first
+
+    @classmethod
+    def get_user_wishes(cls, uid):
+        wishes = Wish.query.filter_by(
+            uid=uid, launched=False).order_by(
+            desc(Wish.create_time)).all()
+        return wishes

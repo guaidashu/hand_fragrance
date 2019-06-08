@@ -3,6 +3,7 @@ author songjie
 """
 from flask import Flask
 from flask_login import LoginManager
+from app.libs.email import mail
 
 from app.errors import register_error
 
@@ -19,6 +20,7 @@ def create_app():
     register_error(app)
     db.init_app(app)
     login_manager.init_app(app)
+    mail.init_app(app)
     db.create_all(app=app)
     return app
 

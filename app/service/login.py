@@ -34,14 +34,11 @@ def handle_register():
     handle register event
     :return:
     """
-    # form = request.values
-    # form = ConversionDataType.combined_multi_dict_to_dict(form)
-    # del form['rePassword']
     form = RegisterForm(request.values)
     if not form.validate():
         return Reply.error(form.errors)
     with db.auto_commit():
         user = User()
-        user.set_attrs(form)
+        form.populate_obj(user)
         db.session.add(user)
     return Reply.success()

@@ -1,7 +1,6 @@
 """
- Created by 七月 on 2017/12/15.
+ Created by songjie on 2018/12/15.
 """
-from app.models.wish import Wish
 from sqlalchemy import func
 from app.models import db
 from app.models.gift import Gift
@@ -17,6 +16,8 @@ class WishService:
     @classmethod
     def get_gifts_count(cls, wish_list):
         book_isbn_list = [wish.isbn for wish in wish_list]
-        count_list = db.session.query(func.count(Gift.id), Gift.isbn). \
-            filter(Gift.launched == False, Gift.isbn.in_(book_isbn_list), Gift.status == 1).all()
+        count_list = db.session.query(func.count(Gift.id), Gift.isbn).filter(Gift.launched == False,
+                                                                             Gift.isbn.in_(book_isbn_list),
+                                                                             Gift.status == 1).group_by(
+            Gift.isbn).all()
         return count_list

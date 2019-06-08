@@ -1,6 +1,8 @@
 """
 author songjie
 """
+from flask_login import current_user
+
 from tool.lib.function import get_date_time
 
 
@@ -26,5 +28,7 @@ class TradeInfo(object):
         return dict(
             user=single.user,
             time=get_date_time(single.create_time, '%Y-%m-%d'),
-            id=single.id
+            id=single.id,
+            isbn=single.isbn,
+            current_user=current_user
         )

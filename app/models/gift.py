@@ -19,6 +19,7 @@ class Gift(Base):
     launched = Column(Boolean, default=False)
 
     def is_yourself_gift(self, uid):
+        # 用于判断是否是自己的礼物
         if self.uid == uid:
             return True
 
