@@ -1,7 +1,7 @@
 """
 Created by yy on 2019-04-15
 """
-from flask_login import current_user
+from flask_login import current_user, login_required, logout_user
 
 from app.api import api
 from app.libs.reply import Reply
@@ -10,7 +10,7 @@ from app.service.login import handle_login, handle_register
 
 @api.route('/user/getUserInfo', methods=['POST'])
 def get_user_info():
-    return Reply.success(current_user)
+    return Reply.success(current_user, data_type=2)
 
 
 @api.route("/user/login", methods=['POST'])
@@ -27,3 +27,14 @@ def register():
     :return:
     """
     return handle_register()
+
+
+@api.route("/user/logout", methods=["POST"])
+@login_required
+def logout():
+    """
+    登出
+    :return:
+    """
+    logout_user()
+    return Reply.success()

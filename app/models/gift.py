@@ -1,7 +1,8 @@
 """
 author songjie
 """
-from sqlalchemy import Column, Integer, ForeignKey, String, Boolean
+from flask import current_app
+from sqlalchemy import Column, Integer, ForeignKey, String, Boolean, desc
 from sqlalchemy.orm import relationship
 
 from app.models import Base
@@ -23,15 +24,26 @@ class Gift(Base):
 
     @property
     def book(self):
+        """
+        所有模型都只返回原始数据
+        :return:
+        """
         get_book_data = GetBookData()
         get_book_data.search_by_isbn(self.isbn)
-        return get_book_data
+        return get_book_data.first
 
-        # @classmethod
-        # @cache.memoize(timeout=600)
-        # def recent(cls):
-        #     gift_list = cls.query.filter_by(launched=False).order_by(
-        #         desc(Gift.create_time)).group_by(Gift.book_id).limit(
-        #         current_app.config['RECENT_BOOK_PER_PAGE']).all()
-        #     view_model = GiftsViewModel.recent(gift_list)
-        #     return view_model
+    # @classmethod
+    # @cache.memoize(timeout=600)
+    # def recent(cls):
+    #     gift_list = cls.query.filter_by(launched=False).order_by(
+    #         desc(Gift.create_time)).group_by(Gift.book_id).limit(
+    #         current_app.config['RECENT_BOOK_PER_PAGE']).all()
+    # view_model = GiftsViewModel.recent(gift_list)
+    # return view_model
+
+    @classmethod
+    def get_user_gifts(cls, uid):
+        gifts = Gift.query.filter_by(
+            uid=uid, launched=False).order_by(
+            desc(Gift.create_time)).all()
+        return gifts

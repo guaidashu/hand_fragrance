@@ -48,7 +48,7 @@ class Reply(object):
         Reply._data_type = value
 
     @classmethod
-    def json(cls, data_type=None):
+    def json(cls):
         """
         :return:
         """
@@ -57,13 +57,11 @@ class Reply(object):
             "code": cls._code,
             "msg": cls._msg
         }
-        if data_type:
-            cls._data_type = data_type
         data = json.dumps(data, default=cls.object_to_dict)
         return Response(data, mimetype="application/json;charset=utf-8")
 
-    @staticmethod
-    def object_to_dict(value):
+    @classmethod
+    def object_to_dict(cls, value):
         data = {}
         if Reply._data_type == 1:
             return value.__dict__
@@ -72,15 +70,14 @@ class Reply(object):
         return data
 
     @classmethod
-    def success(cls, result="", code=0, data_type=None):
+    def success(cls, result="", code=0, data_type=1):
         """
         :param data_type:
         :param code:
         :param result:
         :return:
         """
-        if data_type:
-            cls._data_type = data_type
+        cls._data_type = data_type
         if not result:
             result = cls._result
         cls._code = code
@@ -89,15 +86,14 @@ class Reply(object):
         return cls.json()
 
     @classmethod
-    def error(cls, msg="", code=1, data_type=None):
+    def error(cls, msg="", code=1, data_type=1):
         """
         :param data_type:
         :param code:
         :param msg:
         :return:
         """
-        if data_type:
-            cls._data_type = data_type
+        cls._data_type = data_type
         cls._code = code
         cls._msg = msg
         cls._result = ""

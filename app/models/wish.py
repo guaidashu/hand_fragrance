@@ -21,4 +21,4 @@ class Wish(Base):
     def book(self):
         get_book_data = GetBookData()
         get_book_data.search_by_isbn(self.isbn)
-        return get_book_data
+        return get_book_data.first

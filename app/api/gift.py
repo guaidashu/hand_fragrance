@@ -8,16 +8,32 @@ from app import db
 from app.api import api
 from app.libs.reply import Reply
 from app.models.gift import Gift
+from app.service.gift import GiftService
+from app.view_models.gift import MyGifts
 
 
-@api.route("/gifts/my_gift")
+@api.route("/gifts/my_gift", methods=["POST"])
+@login_required
 def my_gift():
-    pass
+    """
+    我的赠送清单
+    :return:
+    """
+    uid = current_user.id
+    gifts = Gift.get_user_gifts(uid)
+    counter_list = GiftService.get_wish_counts(gifts)
+    my_gifts = MyGifts(gifts, counter_list)
+    gifts = my_gifts.package()
+    return Reply.success(gifts)
 
 
 @api.route("/gifts/book", methods=['POST'])
 @login_required
 def save_to_gifts():
+    """
+    点击赠送书籍后触发此接口进行 赠送存储
+    :return:
+    """
     isbn = request.values.get("isbn")
     if current_user.can_save_to_list(isbn):
         with db.auto_commit():
@@ -29,3 +45,13 @@ def save_to_gifts():
         return Reply.success()
     else:
         return Reply.error("该书籍已存在心愿清单或赠送清单，无法赠送")
+
+
+@api.route("/gifts/getRecentBooks", methods=['POST'])
+def get_recent_books():
+    """
+    获取最近点击赠送的书籍
+    :return:
+    """
+    books = GiftService.recent()
+    return Reply.success(books)

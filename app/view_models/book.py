@@ -15,6 +15,10 @@ class BookViewModel(object):
         self.summary = book['summary'] or ''
         self.image = book['image']
         self.isbn = book['isbn']
+        self.is_in_gift = False
+        self.is_in_wish = False
+        self.gift = None
+        self.wish = None
 
 
 class BookCollection(object):
