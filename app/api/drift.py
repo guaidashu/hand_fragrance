@@ -5,6 +5,7 @@ from flask import request
 from flask_login import login_required, current_user
 from sqlalchemy import or_, desc
 
+from app import db
 from app.api import api
 from app.forms.book import DriftForm
 from app.libs.reply import Reply
@@ -52,7 +53,27 @@ def send_drift():
 @api.route("/drift/getDriftList", methods=["POST"])
 @login_required
 def get_drift_list():
+    """
+    获取交易记录
+    :return:
+    """
     drifts = Drift.query.filter(
         or_(Drift.requester_id == current_user.id, Drift.gifter_id == current_user.id)).order_by(
         desc(Drift.create_time)).all()
     drifts = DriftViewModel.pending(drifts)
+    return Reply.success(drifts, data_type=2)
+
+
+@api.route("/drift/removeDrift", methods=['POST'])
+@login_required
+def redraw_drift():
+    """
+    撤销 交易请求
+    :return:
+    """
+    drift_id = request.values.get("drift_id")
+    drift = Drift.query.filter_by(id=drift_id)
+    with db.auto_commit():
+        current_user.beans += 1
+        drift.delete()
+    return Reply.success()

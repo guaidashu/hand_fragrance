@@ -65,8 +65,11 @@ class Reply(object):
         data = {}
         if Reply._data_type == 1:
             return value.__dict__
-        for column in value.__table__.columns:
-            data[column.name] = getattr(value, column.name)
+        try:
+            for column in value.__table__.columns:
+                data[column.name] = getattr(value, column.name)
+        except:
+            data = value.__dict__
         return data
 
     @classmethod

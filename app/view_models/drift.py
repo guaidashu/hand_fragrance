@@ -20,6 +20,7 @@ class DriftViewModel:
             else:
                 you_are = 'gifter'
             pending_status = PendingStatus.pending_str(drift.pending, you_are)
+            pending_result = PendingStatus.pending_status(drift.pending)
             r = {
                 'drift_id': drift.id,
                 'you_are': you_are,
@@ -36,7 +37,7 @@ class DriftViewModel:
                 'recipient_name': drift.recipient_name,
                 'mobile': drift.mobile,
                 'status_str': pending_status,
-                'status': drift.pending
+                'status': pending_result
             }
             returned.append(r)
         return returned

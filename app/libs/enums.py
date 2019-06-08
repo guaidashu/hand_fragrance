@@ -38,6 +38,28 @@ class PendingStatus(Enum):
         }
         return key_map[status][key]
 
+    @classmethod
+    def pending_status(cls, status):
+        key_map = {
+            cls.waiting: {
+                'status': 1,
+                'value': '等待发货'
+            },
+            cls.reject: {
+                'status': 3,
+                'value': '撤销'
+            },
+            cls.redraw: {
+                'status': 4,
+                'value': '对方已撤销'
+            },
+            cls.success: {
+                'status': 2,
+                'value': '你已邮寄，交易完成'
+            }
+        }
+        return key_map[status]
+
 
 class GiftStatus(Enum):
     waiting = 0
